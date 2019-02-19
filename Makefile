@@ -333,6 +333,20 @@ docker-dns-test-certs-run:
 	  gcr.io/etcd-development/etcd-dns-test:go$(GO_VERSION) \
 	  /bin/bash -c "cd /etcd && /certs/run.sh && rm -rf m*.etcd"
 
+docker-dns-test-certs-metrics-run:
+	$(info GO_VERSION: $(GO_VERSION))
+	$(info HOST_TMP_DIR: $(HOST_TMP_DIR))
+	$(info TMP_DIR_MOUNT_FLAG: $(TMP_DIR_MOUNT_FLAG))
+	docker run \
+	  --rm \
+	  --tty \
+	  --dns 127.0.0.1 \
+	  $(TMP_DIR_MOUNT_FLAG) \
+	  --mount type=bind,source=`pwd`/bin,destination=/etcd \
+	  --mount type=bind,source=`pwd`/tests/docker-dns/certs-metrics,destination=/certs-metrics \
+	  gcr.io/etcd-development/etcd-dns-test:go$(GO_VERSION) \
+	  /bin/bash -c "cd /etcd && /certs-metrics/run.sh && rm -rf m*.etcd"
+
 docker-dns-test-certs-gateway-run:
 	$(info GO_VERSION: $(GO_VERSION))
 	$(info HOST_TMP_DIR: $(HOST_TMP_DIR))
